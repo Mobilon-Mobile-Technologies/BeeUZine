@@ -1,3 +1,4 @@
+import 'package:beeuzine/genre_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -58,7 +59,12 @@ class CreateAccountPage extends StatelessWidget {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => GenreSelectionPage()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow[600],
                         shape: RoundedRectangleBorder(
@@ -68,9 +74,10 @@ class CreateAccountPage extends StatelessWidget {
                       child: Text(
                         "Sign Up",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -85,19 +92,18 @@ class CreateAccountPage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Navigate to Login Page
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                            MaterialPageRoute(builder: (context) => LoginPage()),
                           );
                         },
                         child: Text(
                           "Login",
                           style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold),
+                            fontSize: 14,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -127,6 +133,25 @@ class CreateAccountPage extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+}
+
+// Placeholder WelcomePage
+class WelcomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Welcome"),
+        backgroundColor: Colors.yellow[600],
+      ),
+      body: Center(
+        child: Text(
+          "Welcome to the App!",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -176,8 +201,7 @@ class BottomArcPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.yellow[600]!;
     canvas.drawArc(
-      Rect.fromCircle(
-          center: Offset(size.width / 2, size.height + 50), radius: 200),
+      Rect.fromCircle(center: Offset(size.width / 2, size.height + 50), radius: 200),
       3.14,
       3.14,
       false,

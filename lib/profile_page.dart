@@ -7,119 +7,335 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MainPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainPageState extends State<MainPage> {
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  final List<Widget> _pages = [
+    const Center(child: Text('Home Page', style: TextStyle(fontSize: 24))),
+    const Center(child: Text('Search Page', style: TextStyle(fontSize: 24))),
+    const Center(
+        child: Text('Create New Post Page', style: TextStyle(fontSize: 24))),
+    const Center(
+        child: Text('Saved Items Page', style: TextStyle(fontSize: 24))),
+    const ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_box), label: 'Create'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Saved'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: const Color.fromRGBO(255, 204, 40, 1),
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+    );
+  }
+}
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final double coverHeight = 180;
+  final double profileHeight = 144;
+  bool isFollowing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = coverHeight - profileHeight / 2;
+    final bottom = profileHeight / 2;
+
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            buildCoverImage(),
+            Positioned(
+              top: top,
+              left: 16,
+              child: buildProfileImage(),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        SizedBox(height: bottom + 16),
+        buildAuthorSection(),
+        const Divider(color: Colors.grey, thickness: 0.3),
+        buildAboutSection(),
+        const Divider(color: Colors.grey, thickness: 0.3),
+        buildStatsSection(),
+        const Divider(color: Colors.grey, thickness: 0.3),
+        buildPostSection(),
+        const Divider(color: Colors.grey, thickness: 0.3),
+        buildUserPosts(),
+      ],
     );
   }
+
+  Widget buildCoverImage() => SizedBox(
+        height: coverHeight,
+        child: ClipPath(
+          clipper: BottomCurveClipper(),
+          child: Container(
+            decoration:  BoxDecoration(
+              image: DecorationImage(
+                image:
+                    AssetImage('assests/images/back.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+              ),
+              border: Border.all(color: Color(0xffffd85b), width:2),
+            ),
+          ),
+        ),
+      );
+
+  Widget buildProfileImage() => Container(
+        width: profileHeight,
+        height: profileHeight,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assests/images/profile1.png'),
+            fit: BoxFit.cover,
+          ),
+          color: Colors.grey.shade800,
+          shape: BoxShape.circle,
+          border: Border.all(color: Color(0xffffd85b), width: 4),
+        ),
+      );
+
+  Widget buildAuthorSection() => Padding(
+        padding: const EdgeInsets.only(right: 26,left: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'the_writer09',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Aruhi Dixit',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            buildFollowButton(),
+          ],
+        ),
+      );
+
+  Widget buildFollowButton() => GestureDetector(
+        onTap: () {
+          setState(() {
+            isFollowing = !isFollowing;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+          decoration: BoxDecoration(
+            color: isFollowing
+                ? Colors.transparent
+                : const Color(0xffffd85b),
+            border: Border.all(color: const Color.fromRGBO(255, 204, 40, 1)),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            isFollowing ? 'Unfollow' : 'Follow',
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+
+  Widget buildAboutSection() => const Padding(
+        padding: EdgeInsets.only(right: 26,left: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About Me',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has dbhwdhag bsghwv abbsghgx abhh......',
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.4,
+              ),
+            ),
+            Text(
+              'Read More>',
+              style: TextStyle(
+                color: Color(0xff4a4a4a),
+                fontSize: 12,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildStatsSection() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildStatItem('Followers', '50+'),
+            buildStatItem('Following', '50+'),
+            buildStatItem('Posts', '6'),
+          ],
+        ),
+      );
+
+  Widget buildStatItem(String label, String count) => GestureDetector(
+        onTap: () {
+          print('$label button tapped');
+        },
+        child: Column(
+          children: [
+            Text(
+              count,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildPostSection() => Padding(
+        padding: const EdgeInsets.only(right: 26,left: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Activity',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                print('View All tapped');
+              },
+              child: const Text(
+                'View All >',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xff4a4a4a),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildUserPosts() => Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          height: 150,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            image: const DecorationImage(
+              image: AssetImage('assests/images/user1.png'), // Replace with your image path
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          height: 150,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            image: const DecorationImage(
+              image: AssetImage('assests/images/user2.png'), // Replace with your image path
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+    );
+
+}
+
+class BottomCurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height);
+    path.quadraticBezierTo(
+        size.width / 2, size.height - 50, size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
