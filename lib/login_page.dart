@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(CreateAccountApp());
-}
-
-class CreateAccountApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CreateAccountPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
 
 class CreateAccountPage extends StatelessWidget {
   @override
