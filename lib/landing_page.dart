@@ -1,4 +1,5 @@
 
+import 'package:beeuzine/romance.dart';
 import 'package:beeuzine/sign_up.dart';
 import 'package:flutter/material.dart';
 
@@ -79,7 +80,7 @@ class WelcomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MainPage()),
+                        MaterialPageRoute(builder: (context) => TopPicksScreen()),
                       );
                     },
                     child: Text(
