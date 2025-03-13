@@ -139,7 +139,7 @@ class _GenreSelectionPageState extends State<GenreSelectionPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfilePage(),
+                        builder: (context) => MainPage(),
                       ),
                     );
                   },

@@ -25,7 +25,7 @@ class CategoryTabs extends StatelessWidget {
             isActive: activeCategory == 'Romance',
             onTap: () {
               // Navigate to WildlifeScreen when the Wildlife tab is clicked
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const TopPicksScreen()),
               );
@@ -36,7 +36,7 @@ class CategoryTabs extends StatelessWidget {
             isActive: activeCategory == 'Wildlife',
             onTap: () {
               // Navigate to WildlifeScreen when the Wildlife tab is clicked
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const WildlifeScreen()),
               );

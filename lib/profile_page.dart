@@ -1,8 +1,7 @@
+import 'package:beeuzine/home_page.dart';
+import 'package:beeuzine/romance.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,13 +26,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Home Page', style: TextStyle(fontSize: 24))),
-    const Center(child: Text('Search Page', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('Create New Post Page', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('Saved Items Page', style: TextStyle(fontSize: 24))),
-    const ProfilePage(),
+    HomePage(),
+    Text("create"),
+    TopPicksScreen(),
+    ProfilePage(),
+    
   ];
 
   void _onItemTapped(int index) {
@@ -50,9 +47,8 @@ class _MainPageState extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.add_box), label: 'Create'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Saved'),
+          BottomNavigationBarItem(icon: Icon(Icons.bubble_chart), label: 'Featured'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
