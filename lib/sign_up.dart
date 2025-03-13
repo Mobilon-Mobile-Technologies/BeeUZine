@@ -1,9 +1,7 @@
 import 'package:beeuzine/genre_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(CreateAccountApp());
-}
+
 
 class CreateAccountApp extends StatelessWidget {
   @override

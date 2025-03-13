@@ -25,14 +25,14 @@ class _TopPicksScreenState extends State<TopPicksScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assests/images/image1.png'), // Replace with your image asset
+                image: AssetImage('assests/images/image1.png'), 
                 fit: BoxFit.cover,
               ),
             ),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
               child: Container(
-                color: Colors.black.withOpacity(0), // Adjust the opacity as needed
+                color: Colors.black.withOpacity(0), 
               ),
             ),
           ),
@@ -43,10 +43,10 @@ class _TopPicksScreenState extends State<TopPicksScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
-                    const Icon(Icons.arrow_back, color: Colors.white),
-                    const SizedBox(width: 10),
+                     Icon(Icons.arrow_back, color: Colors.white),
+                     SizedBox(width: 10),
                     Text(
                       'Top Picks of This Week',
                       style: TextStyle(

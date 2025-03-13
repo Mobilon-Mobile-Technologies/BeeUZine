@@ -1,20 +1,10 @@
-
 import 'package:beeuzine/profile_page.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: GenreSelectionPage(),
-    );
-  }
-}
 
 class GenreSelectionPage extends StatefulWidget {
+  const GenreSelectionPage({super.key});
+
   @override
   _GenreSelectionPageState createState() => _GenreSelectionPageState();
 }
@@ -136,7 +126,7 @@ class _GenreSelectionPageState extends State<GenreSelectionPage> {
                 padding: const EdgeInsets.only(bottom: 35.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => MainPage(),
