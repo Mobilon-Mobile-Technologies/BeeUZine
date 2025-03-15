@@ -1,9 +1,22 @@
+import 'package:beeuzine/home_page.dart';
+import 'package:beeuzine/login.dart';
 import 'package:beeuzine/profile_page.dart';
 import 'package:flutter/material.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GenreSelectionPage extends StatefulWidget {
-  const GenreSelectionPage({super.key});
+  final String penName;
+  final String email;
+  final String phoneNumber;
+  final String password;
+
+  const GenreSelectionPage({
+    super.key,
+    required this.penName,
+    required this.email,
+    required this.phoneNumber,
+    required this.password,
+  });
 
   @override
   _GenreSelectionPageState createState() => _GenreSelectionPageState();
@@ -42,6 +55,50 @@ class _GenreSelectionPageState extends State<GenreSelectionPage> {
       }
     });
   }
+
+Future<void> registerUser() async {
+  final supabase = Supabase.instance.client;
+
+  try {
+    // Step 1: Register the user with email and password using Supabase Auth
+    final authResponse = await supabase.auth.signUp(
+      email: widget.email,
+      password: widget.password,
+    );
+
+    if (authResponse.user == null) {
+      throw Exception('Failed to register user with email and password.');
+    }
+
+    // Step 2: Insert additional user data into the "users" table
+    final response = await supabase.from('users').insert({
+      'pen_name': widget.penName,
+      'email': widget.email,
+      'phone_number': widget.phoneNumber,
+      'genres': selectedGenres.toList(),
+    });
+
+
+
+    // Step 3: Navigate to the next page (e.g., HomePage)
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPage(),
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Signed Up Successfully")),
+        );
+      }
+  } catch (e) {
+    // Handle errors (e.g., show a snackbar)
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error registering user: $e')),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -125,14 +182,7 @@ class _GenreSelectionPageState extends State<GenreSelectionPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 35.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(),
-                      ),
-                    );
-                  },
+                  onPressed: registerUser,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,

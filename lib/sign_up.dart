@@ -1,19 +1,29 @@
 import 'package:beeuzine/genre_page.dart';
+import 'package:beeuzine/login.dart';
 import 'package:flutter/material.dart';
 
+class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({super.key});
 
-
-class CreateAccountApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CreateAccountPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<CreateAccountPage> createState() => _CreateAccountPageState();
 }
 
-class CreateAccountPage extends StatelessWidget {
+class _CreateAccountPageState extends State<CreateAccountPage> {
+  final TextEditingController penNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    penNameController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,28 +39,30 @@ class CreateAccountPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             // Page Title
-            Text(
+            const Text(
               "Create an account",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 5),
-            Text(
+            const SizedBox(height: 5),
+            const Text(
               "",
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Input Fields
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
                 children: [
-                  _buildTextField("Enter Your PenName"),
+                  _buildTextField("Enter Your PenName", penNameController),
                   SizedBox(height: 15),
-                  _buildTextField("Enter Your Email"),
+                  _buildTextField("Enter Your Email", emailController),
                   SizedBox(height: 15),
-                  _buildTextField("Enter Your Phone Number"),
+                  _buildTextField(
+                      "Enter Your Phone Number", phoneNumberController),
                   SizedBox(height: 15),
-                  _buildTextField("Create Your Password", isPassword: true),
+                  _buildTextField("Create Your Password", passwordController,
+                      isPassword: true),
                   SizedBox(height: 30),
                   // Sign Up Button
                   SizedBox(
@@ -58,10 +70,17 @@ class CreateAccountPage extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => GenreSelectionPage()),
-                        );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GenreSelectionPage(
+                                penName: penNameController.text,
+                                email: emailController.text,
+                                phoneNumber: phoneNumberController.text,
+                                password: passwordController.text,
+                              ),
+                            ),
+                          );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.yellow[600],
@@ -69,7 +88,7 @@ class CreateAccountPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Sign Up",
                         style: TextStyle(
                           fontSize: 18,
@@ -79,12 +98,12 @@ class CreateAccountPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Already Have an Account
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Already have an account? ",
                         style: TextStyle(fontSize: 14),
                       ),
@@ -92,16 +111,25 @@ class CreateAccountPage extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
                           );
                         },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                        child: TextButton(
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ));
+                          },
                         ),
                       ),
                     ],
@@ -109,7 +137,7 @@ class CreateAccountPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Bottom Yellow Arc
             CustomPaint(
               size: Size(double.infinity, 150),
@@ -121,8 +149,10 @@ class CreateAccountPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hintText, {bool isPassword = false}) {
-    return TextField(
+  Widget _buildTextField(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
+    return TextFormField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         hintText: hintText,
@@ -131,44 +161,6 @@ class CreateAccountPage extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-}
-
-// Placeholder WelcomePage
-class WelcomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Welcome"),
-        backgroundColor: Colors.yellow[600],
-      ),
-      body: Center(
-        child: Text(
-          "Welcome to the App!",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-// Placeholder LoginPage
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Login Page"),
-        backgroundColor: Colors.yellow[600],
-      ),
-      body: Center(
-        child: Text(
-          "This is the Login Page",
-          style: TextStyle(fontSize: 18),
         ),
       ),
     );
@@ -199,7 +191,8 @@ class BottomArcPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Colors.yellow[600]!;
     canvas.drawArc(
-      Rect.fromCircle(center: Offset(size.width / 2, size.height + 50), radius: 200),
+      Rect.fromCircle(
+          center: Offset(size.width / 2, size.height + 50), radius: 200),
       3.14,
       3.14,
       false,
