@@ -1,7 +1,7 @@
+import 'package:beeuzine/create_post_page.dart';
 import 'package:beeuzine/home_page.dart';
 import 'package:beeuzine/romance.dart';
 import 'package:flutter/material.dart';
-
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -15,10 +15,9 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     HomePage(),
-    Text("create"),
+    CreatePostPage(),
     TopPicksScreen(),
     ProfilePage(),
-    
   ];
 
   void _onItemTapped(int index) {
@@ -36,7 +35,8 @@ class _MainPageState extends State<MainPage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.add_box), label: 'Create'),
-          BottomNavigationBarItem(icon: Icon(Icons.bubble_chart), label: 'Featured'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.bubble_chart), label: 'Featured'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         currentIndex: _selectedIndex,
@@ -98,14 +98,13 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ClipPath(
           clipper: BottomCurveClipper(),
           child: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image:
-                    AssetImage('assests/images/back.png'),
+                image: AssetImage('assests/images/back.png'),
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
               ),
-              border: Border.all(color: Color(0xffffd85b), width:2),
+              border: Border.all(color: Color(0xffffd85b), width: 2),
             ),
           ),
         ),
@@ -126,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
   Widget buildAuthorSection() => Padding(
-        padding: const EdgeInsets.only(right: 26,left: 30),
+        padding: const EdgeInsets.only(right: 26, left: 30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -164,9 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
           decoration: BoxDecoration(
-            color: isFollowing
-                ? Colors.transparent
-                : const Color(0xffffd85b),
+            color: isFollowing ? Colors.transparent : const Color(0xffffd85b),
             border: Border.all(color: const Color.fromRGBO(255, 204, 40, 1)),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -181,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
   Widget buildAboutSection() => const Padding(
-        padding: EdgeInsets.only(right: 26,left: 30),
+        padding: EdgeInsets.only(right: 26, left: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -251,7 +248,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
   Widget buildPostSection() => Padding(
-        padding: const EdgeInsets.only(right: 26,left: 30),
+        padding: const EdgeInsets.only(right: 26, left: 30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -280,32 +277,33 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
   Widget buildUserPosts() => Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            image: const DecorationImage(
-              image: AssetImage('assests/images/user1.png'), // Replace with your image path
-              fit: BoxFit.cover,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              image: const DecorationImage(
+                image: AssetImage(
+                    'assests/images/user1.png'), // Replace with your image path
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            image: const DecorationImage(
-              image: AssetImage('assests/images/user2.png'), // Replace with your image path
-              fit: BoxFit.cover,
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              image: const DecorationImage(
+                image: AssetImage(
+                    'assests/images/user2.png'), // Replace with your image path
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-      ],
-    );
-
+        ],
+      );
 }
 
 class BottomCurveClipper extends CustomClipper<Path> {
