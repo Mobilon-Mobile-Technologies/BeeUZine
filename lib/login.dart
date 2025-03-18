@@ -1,6 +1,4 @@
-import 'package:beeuzine/profile_page.dart';
 import 'package:beeuzine/sign_up.dart';
-import 'package:beeuzine/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  String? errorMessage;
 
   @override
   void dispose() {
@@ -22,40 +21,50 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> loginUser() async {
-    final supabase = Supabase.instance.client;
-
+    // Clear any previous errors
     setState(() {
+      errorMessage = null;
       isLoading = true;
     });
 
+    // Basic validation
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      setState(() {
+        errorMessage = 'Email and password cannot be empty';
+        isLoading = false;
+      });
+      return;
+    }
+
     try {
+      final supabase = Supabase.instance.client;
+
       // Authenticate the user with email and password
       final response = await supabase.auth.signInWithPassword(
-        email: emailController.text,
+        email: emailController.text.trim(),
         password: passwordController.text,
       );
 
-
       if (response.user == null) {
-        throw Exception('Login failed. Please check your credentials.');
+        setState(() {
+          errorMessage = 'Login failed. Please check your credentials.';
+          isLoading = false;
+        });
+        return;
       }
 
       // Navigate to the HomePage on successful login
       if (mounted) {
-        Navigator.pushReplacement(
+        Navigator.pushNamedAndRemoveUntil(
           context,
-          MaterialPageRoute(
-            builder: (context) => MainPage(),
-          ),
+          '/main',
+          (route) => false,
         );
       }
     } catch (e) {
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error logging in: $e')),
-      );
-    } finally {
       setState(() {
+        errorMessage = 'Error: ${e.toString().split(':').last.trim()}';
         isLoading = false;
       });
     }
@@ -93,7 +102,36 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   _buildTextField("Enter Your Email", emailController),
                   const SizedBox(height: 15),
-                  _buildTextField("Enter Your Password", passwordController, isPassword: true),
+                  _buildTextField("Enter Your Password", passwordController,
+                      isPassword: true),
+
+                  // Display error message if any
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red[50],
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red[200]!),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Colors.red[700], size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              errorMessage!,
+                              style: TextStyle(
+                                  color: Colors.red[700], fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 30),
                   // Login Button
                   SizedBox(
@@ -164,7 +202,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextField(String hintText, TextEditingController controller, {bool isPassword = false}) {
+  Widget _buildTextField(String hintText, TextEditingController controller,
+      {bool isPassword = false}) {
     return TextField(
       controller: controller,
       obscureText: isPassword,
@@ -217,4 +256,3 @@ class BottomArcPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
-  

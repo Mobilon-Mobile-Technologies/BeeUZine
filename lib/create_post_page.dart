@@ -216,7 +216,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Post created successfully!")),
           );
-          Navigator.pop(context);
+
+          // Navigate to MainPage instead of just popping back
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/main',
+            (route) => false,
+          );
         }
       } catch (e) {
         if (mounted) {

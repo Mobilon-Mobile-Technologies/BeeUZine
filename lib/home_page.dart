@@ -1,3 +1,4 @@
+import 'package:beeuzine/login.dart';
 import 'package:beeuzine/wildlife.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -812,5 +813,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       }
     }
     return 'Untitled Post';
+  }
+
+  Future<void> signOut(BuildContext context) async {
+    try {
+      await Supabase.instance.client.auth.signOut();
+      if (context.mounted) {
+        // Navigate to login page after signing out
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error signing out: $e')),
+        );
+      }
+    }
   }
 }
